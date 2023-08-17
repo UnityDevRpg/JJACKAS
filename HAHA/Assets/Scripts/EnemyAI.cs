@@ -5,7 +5,10 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     public NavMeshAgent agent;
-
+    
+    public PlayerHIT1 playerHIT1;
+    
+    public int damage1; 
     public Transform player;
 
     public LayerMask whatIsGround, whatIsPlayer;
@@ -21,8 +24,8 @@ public class EnemyAI : MonoBehaviour
     public float timeBetweenAttacks;
     bool alreadyAttacked;
     
+    public Animator animator;
     
-
     //States
     public float sightRange, attackRange;
     public bool playerInSightRange, playerInAttackRange;
@@ -32,10 +35,15 @@ public class EnemyAI : MonoBehaviour
         player = GameObject.Find("FirstPersonController").transform;
         agent = GetComponent<NavMeshAgent>();
     }
+    private void Start() {
+        
+        
+
+    }
     
     private void Update()
     {
-        Debug.Log(health);
+        
         //Check for sight and attack range
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
@@ -86,13 +94,14 @@ public class EnemyAI : MonoBehaviour
         if (!alreadyAttacked)
         {
             ///Attack code here
-            
-            Debug.Log("EnemyAttackedPlayer!");
+            animator.SetTrigger("Enemy Attack");
+            playerHIT1.TakeDamageForPlayer(damage1);
             
             ///End of attack code
 
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
+            animator.SetTrigger("Enemy IdleSwitch");
         }
     }
     private void ResetAttack()

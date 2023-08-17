@@ -12,6 +12,8 @@ public class PlayerHIT1 : MonoBehaviour
     public Camera fpscam;
     public float playerRange;
 
+    public float health;
+
     Animator animator;
     
     // Start is called before the first frame update
@@ -56,6 +58,19 @@ public class PlayerHIT1 : MonoBehaviour
     {
         yield return new WaitForSeconds(delayInSeconds);
         canHit = true;
+    }
+    
+    public void TakeDamageForPlayer(int damage)
+    {
+        
+        health -= damage;
+        
+        if (health <= 0) Invoke(nameof(DestroyPlayer), 0.5f);
+    }
+    
+    private void DestroyPlayer()
+    {
+        Destroy(gameObject);
     }
 
 }
